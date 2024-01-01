@@ -21,7 +21,7 @@ export default defineConfig({
     proxy: {
       //跨域代理
       '/api': {
-        target: 'http://localhost:8082/',
+        target: 'http://localhost:9195/',
         changeOrigin: true, //是否设置同源
         rewrite: (path) => path.replace(/^\/api/, '')
       }

@@ -23,12 +23,13 @@ type BookVo = {
 }
 
 type User = {
-  uid: String
-  uname: String
-  birthday: String
-  phone: String
-  email: String
-  privilege: Number
+  uid?: String
+  uname?: String
+  password?: String
+  birthday?: String
+  phone?: String
+  email?: String
+  privilege?: number
 }
 
 type Borrow = {
@@ -47,4 +48,9 @@ type Storage = {
   count: Number
 }
 
-export type { Book, BookVo, User, Borrow, Storage }
+type CheckDto = {
+  uid: String
+  password: String
+}
+
+export type { Book, BookVo, User, Borrow, Storage, CheckDto }

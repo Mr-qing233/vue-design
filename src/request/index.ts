@@ -9,8 +9,8 @@ const request = axios.create({
 // 处理 类型"AxiosResponse<any, any>"上不存在属性"xxx"
 declare module 'axios' {
   interface AxiosResponse {
-    code: Number
-    msg: String
+    code: number
+    msg: string
   }
   export function create(config?: AxiosRequestConfig): AxiosInstance
 }

@@ -20,31 +20,33 @@ const borrowNotReturnData = ref<Borrow>()
 const userStore = useUserStore()
 
 async function getBorrowData() {
-  await findAllBorrowRecord(userStore.userData.uid)
-    .then((res) => {
-      borrowData.value = res.data
-    })
-    .catch((err) => {
-      ElMessage({
-        showClose: true,
-        type: 'error',
-        message: err.msg
+  if (userStore.userData.uid != undefined)
+    await findAllBorrowRecord(userStore.userData.uid)
+      .then((res) => {
+        borrowData.value = res.data
       })
-    })
+      .catch((err) => {
+        ElMessage({
+          showClose: true,
+          type: 'error',
+          message: err.msg
+        })
+      })
 }
 
 async function getBorrowNotReturn() {
-  await findBorrowNotReturn(userStore.userData.uid)
-    .then((res) => {
-      borrowNotReturnData.value = res.data
-    })
-    .catch((err) => {
-      ElMessage({
-        showClose: true,
-        type: 'error',
-        message: err.msg
+  if (userStore.userData.uid != undefined)
+    await findBorrowNotReturn(userStore.userData.uid)
+      .then((res) => {
+        borrowNotReturnData.value = res.data
       })
-    })
+      .catch((err) => {
+        ElMessage({
+          showClose: true,
+          type: 'error',
+          message: err.msg
+        })
+      })
 }
 
 onMounted(() => {

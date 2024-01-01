@@ -30,6 +30,11 @@ function goPage(Page: RouteRecordName) {
 }
 
 const userStore = useUserStore()
+
+function cancelLogin() {
+  window.localStorage.clear()
+  router.push('/login')
+}
 </script>
 
 <template>
@@ -48,12 +53,12 @@ const userStore = useUserStore()
     >
       <template #title>{{ elem.title }}</template>
     </el-menu-item>
-    <el-menu-item @click="goPage('storage')" v-if="userStore.userData.privilege != 0">
+    <el-menu-item @click="goPage('storage')" v-if="userStore.userData.privilege == 1">
       <template #title>出入库管理</template>
     </el-menu-item>
     <!-- 中间栏-分割左对齐组件与右对齐组件 -->
     <div class="flex-grow" />
-    <div class="mr-5r searchBar">
+    <div class="searchBar">
       <el-input
         v-model="searchType"
         class="w-50 m-2"
@@ -61,6 +66,10 @@ const userStore = useUserStore()
         suffix-icon="Search"
       />
     </div>
+    <div class="h-full flex items-center mr-5r">
+      <el-button @click="cancelLogin()">退出登录</el-button>
+    </div>
+
     <!--    <div class="wrapImg">-->
     <!--      <img class="avatar" src="../../assets/icon/avatar.jpg" alt="" />-->
     <!--    </div>-->

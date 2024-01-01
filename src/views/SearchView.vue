@@ -67,7 +67,9 @@ function borrowBook(bid: String, bname: string) {
     type: 'warning'
   })
     .then(() => {
-      addBorrowRecord(bid, userStore.userData.uid)
+      if (userStore.userData.uid != undefined) {
+        addBorrowRecord(bid, userStore.userData.uid)
+      }
     })
     .catch(() => {
       ElMessage({

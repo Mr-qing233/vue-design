@@ -93,27 +93,28 @@ async function alterBook(uid: String, bid: String, count: Number) {
     })
 }
 
-function alterBookProcess(uid: String, bid: String) {
-  ElMessageBox({
-    title: '提示',
-    // 使用自定义组件
-    message: () => h(ChangeNumber),
-    confirmButtonText: '是',
-    showCancelButton: true,
-    cancelButtonText: '否',
-    type: 'warning'
-  })
-    .then(() => {
-      alterBook(uid, bid, bookStore.alterNum)
+function alterBookProcess(uid: String | undefined, bid: String) {
+  if (uid != undefined)
+    ElMessageBox({
+      title: '提示',
+      // 使用自定义组件
+      message: () => h(ChangeNumber),
+      confirmButtonText: '是',
+      showCancelButton: true,
+      cancelButtonText: '否',
+      type: 'warning'
     })
-    .catch(() => {
-      bookStore.cleanNum()
-      ElMessage({
-        showClose: true,
-        type: 'warning',
-        message: '取消修改'
+      .then(() => {
+        alterBook(uid, bid, bookStore.alterNum)
       })
-    })
+      .catch(() => {
+        bookStore.cleanNum()
+        ElMessage({
+          showClose: true,
+          type: 'warning',
+          message: '取消修改'
+        })
+      })
 }
 
 const dialogFormVisible = ref<boolean>(false)
@@ -169,7 +170,9 @@ function onSubmit(formEl: FormInstance | undefined) {
     if (valid) {
       newBook.value.stockQuantity = newBook.value.totalQuantity
       newBook.value.location = newBook.value.location1 + '-' + newBook.value.location2
-      submitNewBook(newBook.value, userStore.userData.uid)
+      if (userStore.userData.uid != undefined) {
+        submitNewBook(newBook.value, userStore.userData.uid)
+      }
       formEl.resetFields()
     } else {
       console.log('error submit!')
