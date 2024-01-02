@@ -74,15 +74,23 @@ const userStore = useUserStore()
 const bookStore = useBookStore()
 async function alterBook(uid: String, bid: String, count: Number) {
   await alterStorageRecord(uid, bid, count)
-    .then(() => {
-      ElMessage({
-        showClose: true,
-        type: 'success',
-        message: '修改成功'
-      })
-      bookStore.cleanNum()
-      getBookData()
-      getStorageData()
+    .then((res) => {
+      if (res.code == 200) {
+        ElMessage({
+          showClose: true,
+          type: 'success',
+          message: '修改成功'
+        })
+        bookStore.cleanNum()
+        getBookData()
+        getStorageData()
+      } else {
+        ElMessage({
+          showClose: true,
+          type: 'error',
+          message: res.msg
+        })
+      }
     })
     .catch((err) => {
       ElMessage({
@@ -94,7 +102,7 @@ async function alterBook(uid: String, bid: String, count: Number) {
 }
 
 function alterBookProcess(uid: String | undefined, bid: String) {
-  if (uid != undefined)
+  if (uid != undefined) {
     ElMessageBox({
       title: '提示',
       // 使用自定义组件
@@ -115,6 +123,13 @@ function alterBookProcess(uid: String | undefined, bid: String) {
           message: '取消修改'
         })
       })
+  } else {
+    ElMessage({
+      showClose: true,
+      type: 'error',
+      message: 'uid undefined'
+    })
+  }
 }
 
 const dialogFormVisible = ref<boolean>(false)
@@ -143,15 +158,24 @@ const options = [
 // 提交事件
 async function submitNewBook(book: Book, uid: String) {
   await addNewBook(book, uid)
-    .then(() => {
-      ElMessage({
-        showClose: true,
-        type: 'success',
-        message: '添加成功'
-      })
-      dialogFormVisible.value = false
-      getBookData()
-      getStorageData()
+    .then((res) => {
+      console.log(res.msg)
+      if (res.code == 200) {
+        ElMessage({
+          showClose: true,
+          type: 'success',
+          message: '添加成功'
+        })
+        dialogFormVisible.value = false
+        getBookData()
+        getStorageData()
+      } else {
+        ElMessage({
+          showClose: true,
+          type: 'error',
+          message: res.msg
+        })
+      }
     })
     .catch((err) => {
       ElMessage({
@@ -175,7 +199,11 @@ function onSubmit(formEl: FormInstance | undefined) {
       }
       formEl.resetFields()
     } else {
-      console.log('error submit!')
+      ElMessage({
+        showClose: true,
+        type: 'error',
+        message: '请完善信息'
+      })
       return false
     }
   })

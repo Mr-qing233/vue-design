@@ -49,8 +49,21 @@ const userStore = useUserStore()
 async function addBorrowRecord(bid: String, uid: String) {
   await newBorrowRecord(bid, uid)
     .then((res) => {
-      inputSearch()
-      console.log(res)
+      if (res.code == 200) {
+        ElMessage({
+          showClose: true,
+          type: 'success',
+          message: '借阅成功'
+        })
+        inputSearch()
+        // console.log(res)
+      } else {
+        ElMessage({
+          showClose: true,
+          type: 'error',
+          message: res.msg
+        })
+      }
     })
     .catch((error) => {
       ElMessage({

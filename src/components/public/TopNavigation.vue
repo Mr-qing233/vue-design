@@ -2,6 +2,7 @@
 import { ref } from 'vue'
 import { type RouteRecordName, useRouter } from 'vue-router'
 import { useUserStore } from '@/stores/userStore'
+import { ElMessage } from 'element-plus'
 
 const router = useRouter()
 
@@ -33,6 +34,11 @@ const userStore = useUserStore()
 
 function cancelLogin() {
   window.localStorage.clear()
+  ElMessage({
+    showClose: true,
+    type: 'info',
+    message: '退出登录'
+  })
   router.push('/login')
 }
 </script>

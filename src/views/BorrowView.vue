@@ -56,14 +56,22 @@ onMounted(() => {
 
 async function returnBook(borrowId: Number) {
   await borrowReturn(borrowId)
-    .then(() => {
-      ElMessage({
-        showClose: true,
-        type: 'success',
-        message: '归还成功'
-      })
-      getBorrowData()
-      getBorrowNotReturn()
+    .then((res) => {
+      if (res.code == 200) {
+        ElMessage({
+          showClose: true,
+          type: 'success',
+          message: '归还成功'
+        })
+        getBorrowData()
+        getBorrowNotReturn()
+      } else {
+        ElMessage({
+          showClose: true,
+          type: 'error',
+          message: res.msg
+        })
+      }
     })
     .catch((err) => {
       ElMessage({

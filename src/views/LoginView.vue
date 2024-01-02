@@ -42,6 +42,8 @@ async function login(check: CheckDto) {
     .then((res) => {
       if (res.code == 200) {
         userStore.userData = res.data
+        console.log(res.data)
+        console.log(userStore.userData)
         ElMessage({
           showClose: true,
           type: 'success',
@@ -75,7 +77,11 @@ function checkName(rule: any, value: any, cb: any) {
   checkNameExist(value)
     .then((res) => {
       // 未被使用的uname
-      return cb()
+      if (res.code == 200) {
+        return cb()
+      } else {
+        return cb(new Error('用户名已被使用'))
+      }
     })
     .catch((err) => {
       return cb(new Error('Please enter a valid uname'))
@@ -143,24 +149,36 @@ const userRegister = ref({
   privilege: 0
 })
 
-async function register(user: User) {
-  await submitRegister(user)
-    .then(() => {
-      ElMessage({
-        showClose: true,
-        type: 'success',
-        message: '注册成功'
-      })
-      location.reload()
-    })
-    .catch((err) => {
-      console.log(user)
+async function register(user: User, form: FormInstance) {
+  if (!form) return
+  await form.validate(async (valid) => {
+    if (valid) {
+      await submitRegister(user)
+        .then(() => {
+          ElMessage({
+            showClose: true,
+            type: 'success',
+            message: '注册成功'
+          })
+          // location.reload()
+          resetForm(form)
+        })
+        .catch((err) => {
+          console.log(user)
+          ElMessage({
+            showClose: true,
+            type: 'error',
+            message: err.msg
+          })
+        })
+    } else {
       ElMessage({
         showClose: true,
         type: 'error',
-        message: err.msg
+        message: '请补全有效信息'
       })
-    })
+    }
+  })
 }
 </script>
 
@@ -243,7 +261,9 @@ async function register(user: User) {
             </el-form-item>
             <el-form-item>
               <el-button @click="resetForm(userRegisterForm)">清空内容</el-button>
-              <el-button type="primary" @click="register(userRegister)">确认提交</el-button>
+              <el-button type="primary" @click="register(userRegister, userRegisterForm)"
+                >确认提交</el-button
+              >
             </el-form-item>
           </el-form>
         </div>
